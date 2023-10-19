@@ -11,7 +11,7 @@ void insertion_sort_list(listint_t **list);
  */
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *current, *key;
+	listint_t *current, *key, *prev_node;
 	int value;
 
 	if (!list || !(*list) || !(*list)->next)
@@ -22,11 +22,17 @@ void insertion_sort_list(listint_t **list)
 	{
 		key = current;
 		value = key->n;
-		while (key->prev != NULL && key->prev->n > value)
+		prev_node = key->prev;
+
+		while (prev_node != NULL && prev_node->n > value)
 		{
-			swap_nodes(list, key, key->prev);
+			swap_nodes(list, key, prev_node);
 			print_list(*list);
-			key = key->prev;
+			key = prev_node;
+			if (prev_node->prev)
+    prev_node = prev_node->prev;
+   else
+			 prev_node = NULL;
 		}
 		current = key->next;
 	}
