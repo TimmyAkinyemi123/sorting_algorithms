@@ -1,6 +1,6 @@
 #include "sort.h"
 
-void swap_nodes(listint_t **head, listint_t *left, listint_t *right);
+void swap_nodes(listint_t **head, listint_t **left, listint_t *right);
 void insertion_sort_list(listint_t **list);
 
 /**
@@ -11,8 +11,8 @@ void insertion_sort_list(listint_t **list);
  */
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *current, *key, *prev_node;
-	int value;
+	listint_t *current, *key, *temp;
+	const listint_t *list_ptr = (const listint_t *)*list;
 
 	if (!list || !(*list) || !(*list)->next)
 		return;
@@ -20,21 +20,15 @@ void insertion_sort_list(listint_t **list)
 	current = (*list)->next;
 	while (current)
 	{
-		key = current;
-		value = key->n;
-		prev_node = key->prev;
+		key = current->prev;
+		temp = current->next;
 
-		while (prev_node != NULL && prev_node->n > value)
+		while (key != NULL && key->n > current->n)
 		{
-			swap_nodes(list, key, prev_node);
-			print_list(*list);
-			key = prev_node;
-			if (prev_node->prev)
-    prev_node = prev_node->prev;
-   else
-			 prev_node = NULL;
+			swap_nodes(list, &key, current);
+			print_list(list_ptr);
 		}
-		current = key->next;
+		current = temp;
 	}
 }
 
@@ -45,21 +39,20 @@ void insertion_sort_list(listint_t **list)
  * @left: A pointer to the left node to be swapped.
  * @right: A pointer to the right node to be swapped.
  */
-void swap_nodes(listint_t **head, listint_t *left, listint_t *right)
+void swap_nodes(listint_t **head, listint_t **left, listint_t *right)
 {
-	listint_t *left_prev = left->prev;
-	listint_t *right_next = right->next;
+	(*left)->next = right->next;
 
-	if (left_prev)
-		left_prev->next = right;
+	if (right->next != NULL)
+		right->next->prev = *left;
+
+	right->prev = (*left)->prev;
+	right->next = *left;
+
+	if ((*left)->prev)
+		(*left)->prev->next = right;
 	else
 		*head = right;
-
-	right->prev = left_prev;
-	right->next = left;
-	left->prev = right;
-	left->next = right_next;
-
-	if (right_next)
-		right_next->prev = left;
+	(*left)->prev = right;
+	*left = right->prev;
 }
