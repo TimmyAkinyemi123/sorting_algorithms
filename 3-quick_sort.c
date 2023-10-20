@@ -30,7 +30,7 @@ void quicksort(int *array, int low, int high, size_t size)
 {
 	int pi;
 
-	if (high - low > 0)
+	if (low < high)
 	{
 		pi = lomuto_partition(array, low, high, size);
 		quicksort(array, low, pi - 1, size);
