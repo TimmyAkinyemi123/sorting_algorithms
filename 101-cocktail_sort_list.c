@@ -1,6 +1,6 @@
 #include "sort.h"
 
-void swap_nodes(listint_t *node1, listint_t *node2);
+void swap_nodes(listint_t *node1, listint_t *node2, listint_t **list);
 
 /**
  * cocktail_sort_list - Sorts a doubly linked list of integers in
@@ -23,7 +23,7 @@ void cocktail_sort_list(listint_t **list)
 		{
 			if (current->n > current->next->n)
 			{
-				swap_nodes(current, current->next);
+				swap_nodes(current, current->next, list);
 				swapped = 1;
 				print_list(*list);
 			}
@@ -39,7 +39,7 @@ void cocktail_sort_list(listint_t **list)
 		{
 			if (current->n < current->prev->n)
 			{
-				swap_nodes(current->prev, current);
+				swap_nodes(current->prev, current, list);
 				swapped = 1;
 				print_list(*list);
 			}
@@ -51,29 +51,25 @@ void cocktail_sort_list(listint_t **list)
 
 /**
  * swap_nodes - Swaps two nodes in a doubly linked list.
- * @node1: Pointer to the first node.
- * @node2: Pointer to the second node.
+ * @node_a: First node to be swapped.
+ * @node_b: Second node to be swapped.
+ * @list: A pointer to the pointer to the head of the list.
  */
-void swap_nodes(listint_t *node1, listint_t *node2)
+void swap_nodes(listint_t *node_a, listint_t *node_b, listint_t **list)
 {
-	if (node1 == NULL || node2 == NULL)
-		return;
+    listint_t *temp;
 
-	if (node1->prev)
-		node1->prev->next = node2;
+    if (node_a->prev != NULL)
+        node_a->prev->next = node_b;
+    else
+        *list = node_b;
 
-	if (node2->next)
-		node2->next->prev = node1;
+    if (node_b->next != NULL)
+        node_b->next->prev = node_a;
 
-	node1->next = node2->next;
-	node2->prev = node1->prev;
-
-	node1->prev = node2;
-	node2->next = node1;
-
-	if (node1->next)
-		node1->next->prev = node1;
-
-	if (node2->prev)
-		node2->prev->next = node2;
+    temp = node_b->next;
+    node_b->next = node_a;
+    node_a->prev = node_b;
+    node_a->next = temp;
+    node_b->prev = NULL;
 }
