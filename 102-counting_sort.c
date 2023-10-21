@@ -10,42 +10,54 @@
  */
 void counting_sort(int *array, size_t size)
 {
-	int i, max = array[0], *count, index = 0;
-	size_t j;
+    int max = array[0];
+    int min = array[0];
+    int range, index;
+    size_t i, j;
 
-	if (array == NULL || size <= 1)
-		return;
-	for (j = 1; j < size; j++)
-	{
-		if (array[j] > max)
-			max = array[j];
-	}
+				if (array == NULL || size <= 1)
+        return;
 
-	count = malloc((max + 1) * sizeof(int));
-	if (count == NULL)
-		return;
-	for (i = 0; i <= max; i++)
-		count[i] = 0;
-	for (j = 0; j < size; j++)
-		count[array[j]]++;
+    for (i = 1; i < size; i++) {
+        if (array[i] > max)
+            max = array[i];
+        if (array[i] < min)
+            min = array[i];
+    }
 
-	/* Print the counting array */
-	for (i = 0; i <= max; i++)
-	{
-		if (i != 0)
-			printf(", ");
-		printf("%d", count[i]);
-	}
-	printf("\n");
+    range = max - min + 1;
 
-	for (i = 0; i <= max; i++)
-	{
-		while (count[i] > 0)
-		{
-			array[index] = i;
-			index++;
-			count[i]--;
-		}
-	}
-	free(count);
+    int *count = malloc(range * sizeof(int));
+    if (count == NULL)
+        return;
+
+    for (i = 0; i < range; i++) {
+        count[i] = 0;
+    }
+
+    /* Populate the counting array */
+    for (j = 0; j < size; j++) {
+        count[array[j] - min]++;
+    }
+
+    /* Print the counting array */
+    for (i = 0; i < range; i++) {
+        if (i != 0) {
+            printf(", ");
+        }
+        printf("%d", count[i]);
+    }
+    printf("\n");
+
+    index = 0;
+    for (i = 0; i < range; i++) {
+        while (count[i] > 0) {
+            array[index] = i + min;
+            index++;
+            count[i]--;
+        }
+    }
+
+    free(count);
 }
+
