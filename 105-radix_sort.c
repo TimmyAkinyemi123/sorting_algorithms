@@ -51,7 +51,6 @@ void countSort(int *array, size_t size, int exp)
 	for (i = 0; i < size; i++)
 		array[i] = output[i];
 
-	print_array(array, size);
 	free(output);
 }
 
@@ -68,5 +67,6 @@ void radix_sort(int *array, size_t size)
 	for (exp = 1; max / exp > 0; exp *= 10)
 	{
 		countSort(array, size, exp);
+		print_array(array, size);
 	}
 }
