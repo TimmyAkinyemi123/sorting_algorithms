@@ -37,7 +37,7 @@ void countSort(int *array, size_t size, int exp)
 	size_t i;
 
 	if (output == NULL)
-		exit(1);
+		return;
 
 	for (i = 0; i < size; i++)
 		count[(array[i] / exp) % 10]++;
