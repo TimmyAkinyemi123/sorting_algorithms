@@ -16,8 +16,6 @@ int getMax(int *array, size_t size)
 	int max = array[0];
 	size_t i;
 
-	if (!array || size < 2)
-		return (0);
 	for (i = 1; i < size; i++)
 	{
 		if (array[i] > max)
@@ -71,6 +69,7 @@ void radix_sort(int *array, size_t size)
 	for (exp = 1; max / exp > 0; exp *= 10)
 	{
 		countSort(array, size, exp);
-		print_array(array, size);
+		if (exp != 1)
+			print_array(array, size);
 	}
 }
